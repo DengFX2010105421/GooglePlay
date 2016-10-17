@@ -80,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
         mMainTitles = UIUtils.getStrings(R.array.main_titles);
-//        MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(getSupportFragmentManager());
-        MainFragmentStatePagerAdapter adapter = new MainFragmentStatePagerAdapter(getSupportFragmentManager());
+        MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(getSupportFragmentManager());
+//        MainFragmentStatePagerAdapter adapter = new MainFragmentStatePagerAdapter(getSupportFragmentManager());
         mMainViewpager.setAdapter(adapter);
         mMainTabs.setViewPager(mMainViewpager);
     }

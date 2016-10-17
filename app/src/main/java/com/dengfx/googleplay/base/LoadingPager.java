@@ -12,8 +12,6 @@ import com.dengfx.googleplay.utils.UIUtils;
 /**
  * Created by 邓FX on 2016/10/12.
  */
-
-
 public abstract class LoadingPager extends FrameLayout {
 
     public static final int STATE_LOADING = 0;
@@ -22,7 +20,7 @@ public abstract class LoadingPager extends FrameLayout {
     public static final int STATE_EMPTY = 2;
     public static final int STATE_SUCCESS = 3;
 
-    public static int CURRENT_STATE = STATE_LOADING;
+    public int CURRENT_STATE = STATE_LOADING;
 
     private View mLoadingView;
     private View mErrorView;
@@ -73,22 +71,7 @@ public abstract class LoadingPager extends FrameLayout {
         if (CURRENT_STATE == STATE_SUCCESS && mSuccessView == null) {
             mSuccessView = initSuccessView();
             this.addView(mSuccessView);
-        }
-
-        if (mSuccessView != null) {
             mSuccessView.setVisibility(CURRENT_STATE == STATE_SUCCESS ? VISIBLE : GONE);
-        }
-    }
-
-    private class LoadDataTask implements Runnable {
-        @Override
-        public void run() {
-            CURRENT_STATE = initData().getState();
-            MyApplication.mMainThreadHandler.post(new Runnable() {
-                @Override
-                public void run() {refreshViewByState();}
-            });
-            mLoadDataTask = null;
         }
     }
 
@@ -107,6 +90,20 @@ public abstract class LoadingPager extends FrameLayout {
 
         public int getState() {
             return mState;
+        }
+    }
+
+    private class LoadDataTask implements Runnable {
+        @Override
+        public void run() {
+            CURRENT_STATE = initData().getState();
+            MyApplication.mMainThreadHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    refreshViewByState();
+                }
+            });
+            mLoadDataTask = null;
         }
     }
 

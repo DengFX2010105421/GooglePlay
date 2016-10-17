@@ -1,18 +1,29 @@
 package com.dengfx.googleplay.fragment;
 
-import android.graphics.Color;
 import android.os.SystemClock;
-import android.view.Gravity;
+import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ListView;
 
+import com.dengfx.googleplay.adapter.AppAdapter;
 import com.dengfx.googleplay.base.BaseFragment;
 import com.dengfx.googleplay.base.LoadingPager;
+import com.dengfx.googleplay.bean.ItemBean;
+import com.dengfx.googleplay.config.Constants;
+import com.dengfx.googleplay.protocol.AppProtocol;
+import com.dengfx.googleplay.utils.HttpUtils;
+import com.dengfx.googleplay.utils.LogUtils;
 import com.dengfx.googleplay.utils.UIUtils;
 
-import java.util.Random;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class AppFragment extends BaseFragment {
+    private List<ItemBean> mDataSet;
+    private AppProtocol mAppProtocol;
 
     public static AppFragment newInstance() {
         return new AppFragment();
@@ -20,16 +31,41 @@ public class AppFragment extends BaseFragment {
 
     @Override
     public View initSuccessView() {
-        TextView successView = new TextView(UIUtils.getContext());
-        successView.setGravity(Gravity.CENTER);
-        successView.setText(this.getClass().getSimpleName());
-        successView.setTextColor(Color.RED);
-        return successView;
+        ListView listView = new ListView(UIUtils.getContext());
+        listView.setFastScrollEnabled(true);
+        listView.setAdapter(new AppAdapter(mDataSet, listView) {
+            @Override
+            public List onLoadMore() throws Exception {
+                SystemClock.sleep(2000);
+                List<ItemBean> itemBeanList = mAppProtocol.loadData(getUrl(mDataSet.size()));
+                return itemBeanList;
+            }
+        });
+        return listView;
     }
 
     @Override
     public LoadingPager.LoadedResult initData() {
-        SystemClock.sleep(2000);
-        return loadedResults[new Random().nextInt(3)];
+        mAppProtocol = new AppProtocol();
+        try {
+            List<ItemBean> itemBeanList = mAppProtocol.loadData(getUrl(0));
+            LogUtils.s(itemBeanList.toString());
+            if (itemBeanList != null && itemBeanList.size() != 0) {
+                mDataSet = itemBeanList;
+                return LoadingPager.LoadedResult.RESULT_SUCCESS;
+            } else {
+                return LoadingPager.LoadedResult.RESULT_EMPTY;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return LoadingPager.LoadedResult.RESULT_ERROR;
+        }
+    }
+
+    @NonNull
+    private String getUrl(int index) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("index", index);
+        return Constants.URLS.BASEURL + "app?" + HttpUtils.getUrlParamsByMap(params);
     }
 }

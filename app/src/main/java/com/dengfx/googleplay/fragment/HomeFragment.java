@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class HomeFragment extends BaseFragment {
 
-    private ArrayList<ItemBean> mDataSet;
+    private List<ItemBean> mDataSet;
     private HomeProtocol mHomeProtocol;
 
     public static HomeFragment newInstance() {
@@ -63,18 +63,10 @@ public class HomeFragment extends BaseFragment {
         listView.setAdapter(new HomeAdapter(mDataSet, listView) {
 
             @Override
-            public boolean canLoadMore() {
-                return true;
-            }
-
-            @Override
             public List onLoadMore() throws Exception {
                 SystemClock.sleep(2000);
                 HomeBean moreHomeBean = mHomeProtocol.loadData(getUrl(mDataSet.size()));
-                if (moreHomeBean != null) {
-                    return moreHomeBean.list;
-                }
-                return super.onLoadMore();
+                return moreHomeBean.list;
             }
         });
         return listView;

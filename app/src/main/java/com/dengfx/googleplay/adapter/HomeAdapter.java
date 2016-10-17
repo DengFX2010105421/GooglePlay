@@ -10,7 +10,7 @@ import com.dengfx.googleplay.holder.BaseHolder;
 import com.dengfx.googleplay.holder.ItemHolder;
 import com.dengfx.googleplay.utils.UIUtils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 邓FX on 2016/10/13.
@@ -18,19 +18,26 @@ import java.util.ArrayList;
 
 public class HomeAdapter extends SuperBaseAdapter<ItemBean> {
 
-    public HomeAdapter(ArrayList<ItemBean> dataSet, AbsListView absListView) {
+    public HomeAdapter(List<ItemBean> dataSet, AbsListView absListView) {
         super(dataSet, absListView);
     }
 
     @Override
     public void onNormalItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(UIUtils.getContext(),"条目被点击了",Toast.LENGTH_SHORT).show();
+        List<ItemBean> dataSet = mDataSet;
+        Toast.makeText(UIUtils.getContext(), dataSet.get(position).name, Toast.LENGTH_SHORT).show();
         super.onNormalItemClick(parent, view, position, id);
     }
 
     @Override
     public BaseHolder getSpecialHolder() {
         return new ItemHolder();
+    }
+
+
+    @Override
+    public boolean canLoadMore() {
+        return true;
     }
 
 

@@ -9,6 +9,7 @@ import com.dengfx.googleplay.MyApplication;
 import com.dengfx.googleplay.holder.BaseHolder;
 import com.dengfx.googleplay.holder.LoadMoreHolder;
 import com.dengfx.googleplay.proxy.ThreadPoolProxyFactory;
+import com.dengfx.googleplay.utils.LogUtils;
 
 import java.util.List;
 
@@ -24,8 +25,8 @@ public abstract class SuperBaseAdapter<T> extends MyBaseAdapter implements Adapt
 
     private static final int VIEWTYPE_LOADMORE = 1;
     private static final int VIEWTYPE_NORMAL = 0;
-    private LoadMoreHolder mLoadMoreHolder;
     private static final int PAGE_SIZE = 20;
+    private LoadMoreHolder mLoadMoreHolder;
     private LoadMoreData mLoadMoreDataTask;
 
     private AbsListView mAbsListView;
@@ -110,7 +111,6 @@ public abstract class SuperBaseAdapter<T> extends MyBaseAdapter implements Adapt
     }
 
     public void onNormalItemClick(AdapterView<?> parent, View view, int position, long id) {
-
     }
 
     @Override
@@ -130,15 +130,21 @@ public abstract class SuperBaseAdapter<T> extends MyBaseAdapter implements Adapt
 
     public abstract BaseHolder getSpecialHolder();
 
+    public List onLoadMore() throws Exception {
+        return null;
+    }
+
     private class LoadMoreData implements Runnable {
+
+        private List mLoadMoreList;
+
         @Override
         public void run() {
-            List loadMoreList = null;
             try {
-                loadMoreList = onLoadMore();
-                if (loadMoreList == null) {
+                mLoadMoreList = onLoadMore();
+                if (mLoadMoreList == null) {
                     mState = LoadMoreHolder.LOADMORE_ERROR;
-                } else if (loadMoreList.size() == PAGE_SIZE) {
+                } else if (mLoadMoreList.size() == PAGE_SIZE) {
                     mState = LoadMoreHolder.LOADMORE_LOADING;
                 } else {
                     mState = LoadMoreHolder.LOADMORE_NONE;
@@ -147,14 +153,11 @@ public abstract class SuperBaseAdapter<T> extends MyBaseAdapter implements Adapt
                 e.printStackTrace();
                 mState = LoadMoreHolder.LOADMORE_ERROR;
             }
-            //============================================
-            final List finalLoadMoreList = loadMoreList;
-            //============================================
             MyApplication.mMainThreadHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (finalLoadMoreList != null) {
-                        mDataSet.addAll(finalLoadMoreList);
+                    if (mLoadMoreList != null) {
+                        mDataSet.addAll(mLoadMoreList);
                         notifyDataSetChanged();
                     }
                     mLoadMoreHolder.setData(mState);
@@ -162,9 +165,5 @@ public abstract class SuperBaseAdapter<T> extends MyBaseAdapter implements Adapt
             });
             mLoadMoreDataTask = null;
         }
-    }
-
-    public List onLoadMore() throws Exception {
-        return null;
     }
 }

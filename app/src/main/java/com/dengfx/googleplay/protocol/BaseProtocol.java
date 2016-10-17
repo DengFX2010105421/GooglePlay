@@ -30,10 +30,15 @@ public abstract class BaseProtocol<T> {
 
     public BaseProtocol() {
         mGson = new Gson();
+        mOkHttpClient = getOkHttpClient();
+    }
+
+    private OkHttpClient getOkHttpClient() {
         if (mOkHttpClient == null) synchronized (BaseProtocol.class) {
             if (mOkHttpClient == null)
                 mOkHttpClient = new OkHttpClient();
         }
+        return mOkHttpClient;
     }
 
     public T loadData(String url) throws IOException {
@@ -72,7 +77,7 @@ public abstract class BaseProtocol<T> {
 
     private T loadDataFromNet(String url) throws IOException {
         Request request = new Request.Builder().get().url(url).build();
-        Response response = mOkHttpClient.newCall(request).execute();
+        Response response = getOkHttpClient().newCall(request).execute();
         if (response.isSuccessful()) {
             LogUtils.s("网络获取成功");
             String newJson = response.body().string();
