@@ -14,22 +14,12 @@ import java.util.List;
 
 public class HomeAdapter_v1 extends MyBaseAdapter<ItemBean> {
 
-
     public HomeAdapter_v1(List<ItemBean> dataSet) {
         super(dataSet);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-//        ViewHolder viewHolder;
-//        if (convertView == null) {
-//            viewHolder = new ViewHolder();
-//            convertView = viewHolder.mItemView;
-//        }
-//        viewHolder = (ViewHolder) convertView.getTag();
-//        viewHolder.setData((String) getItem(position));
-//        return convertView;
-//==========================================================
         ItemHolder itemHolder;
         if (convertView == null) {
             itemHolder = new ItemHolder();
@@ -39,30 +29,4 @@ public class HomeAdapter_v1 extends MyBaseAdapter<ItemBean> {
         itemHolder.setData(getItem(position));
         return convertView;
     }
-
-/*    private static class ViewHolder {
-        private View mItemView;
-        private TextView mTextView1;
-        private TextView mTextView2;
-        private String mData;
-
-        ViewHolder() {
-            mItemView = View.inflate(UIUtils.getContext(), R.layout.item_temp, null);
-            mTextView1 = (TextView) mItemView.findViewById(R.id.tmp_tv_1);
-            mTextView2 = (TextView) mItemView.findViewById(R.id.tmp_tv_2);
-            mItemView.setTag(this);
-        }
-
-        void setData(String data) {
-            mData = data;
-            if (mTextView1 != null)
-                mTextView1.setText("===头" + data + "===");
-            if (mTextView2 != null)
-                mTextView2.setText("===尾" + data + "===");
-        }
-
-        public String getData() {
-            return mData;
-        }
-    }*/
 }

@@ -39,7 +39,5 @@ public class HomeAdapter extends SuperBaseAdapter<ItemBean> {
     public boolean canLoadMore() {
         return true;
     }
-
-
 }
 

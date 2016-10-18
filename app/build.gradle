@@ -9,6 +9,10 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+
+        jackOptions {
+            enabled true
+        }
     }
 
 
@@ -19,17 +23,18 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility 1.7
-        sourceCompatibility 1.7
+//        targetCompatibility 1.8
+//        sourceCompatibility 1.8
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:appcompat-v7:24.2.1'
     compile files('libs/gson-2.2.3.jar')
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'org.webjars.npm:react-imageloader:2.1.0'
-    //    compile(name: 'PagerSlidingTabStrip_Lib-release', ext: 'aar')
     compile project(':PagerSlidingTabStrip_Lib')
     compile files('libs/picasso-2.5.2.jar')
     compile 'eu.the4thfloor.volley:com.android.volley:2015.05.28'

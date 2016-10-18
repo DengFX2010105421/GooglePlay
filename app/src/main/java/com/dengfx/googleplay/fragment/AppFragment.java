@@ -10,10 +10,9 @@ import com.dengfx.googleplay.base.BaseFragment;
 import com.dengfx.googleplay.base.LoadingPager;
 import com.dengfx.googleplay.bean.ItemBean;
 import com.dengfx.googleplay.config.Constants;
+import com.dengfx.googleplay.factory.ListViewFactory;
 import com.dengfx.googleplay.protocol.AppProtocol;
 import com.dengfx.googleplay.utils.HttpUtils;
-import com.dengfx.googleplay.utils.LogUtils;
-import com.dengfx.googleplay.utils.UIUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -31,14 +30,12 @@ public class AppFragment extends BaseFragment {
 
     @Override
     public View initSuccessView() {
-        ListView listView = new ListView(UIUtils.getContext());
-        listView.setFastScrollEnabled(true);
+        ListView listView = ListViewFactory.createListView();
         listView.setAdapter(new AppAdapter(mDataSet, listView) {
             @Override
             public List onLoadMore() throws Exception {
                 SystemClock.sleep(2000);
-                List<ItemBean> itemBeanList = mAppProtocol.loadData(getUrl(mDataSet.size()));
-                return itemBeanList;
+                return mAppProtocol.loadData(getUrl(mDataSet.size()));
             }
         });
         return listView;
@@ -49,7 +46,6 @@ public class AppFragment extends BaseFragment {
         mAppProtocol = new AppProtocol();
         try {
             List<ItemBean> itemBeanList = mAppProtocol.loadData(getUrl(0));
-            LogUtils.s(itemBeanList.toString());
             if (itemBeanList != null && itemBeanList.size() != 0) {
                 mDataSet = itemBeanList;
                 return LoadingPager.LoadedResult.RESULT_SUCCESS;

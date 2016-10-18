@@ -1,18 +1,27 @@
 package com.dengfx.googleplay.fragment;
 
-import android.graphics.Color;
 import android.os.SystemClock;
-import android.view.Gravity;
+import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ListView;
 
+import com.dengfx.googleplay.adapter.SubjectAdapter;
 import com.dengfx.googleplay.base.BaseFragment;
 import com.dengfx.googleplay.base.LoadingPager;
-import com.dengfx.googleplay.utils.UIUtils;
+import com.dengfx.googleplay.bean.SubjectBean;
+import com.dengfx.googleplay.config.Constants;
+import com.dengfx.googleplay.factory.ListViewFactory;
+import com.dengfx.googleplay.protocol.SubjectProtocol;
+import com.dengfx.googleplay.utils.HttpUtils;
 
-import java.util.Random;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SubjectFragment extends BaseFragment {
+    private List<SubjectBean> mDataSet;
+    private SubjectProtocol mSubjectProtocol;
 
     public static SubjectFragment newInstance() {
         return new SubjectFragment();
@@ -20,16 +29,38 @@ public class SubjectFragment extends BaseFragment {
 
     @Override
     public View initSuccessView() {
-        TextView successView = new TextView(UIUtils.getContext());
-        successView.setGravity(Gravity.CENTER);
-        successView.setText(this.getClass().getSimpleName());
-        successView.setTextColor(Color.RED);
-        return successView;
+        ListView listView = ListViewFactory.createListView();
+        listView.setAdapter(new SubjectAdapter(mDataSet, listView) {
+            @Override
+            public List onLoadMore() throws Exception {
+                SystemClock.sleep(2000);
+                return mSubjectProtocol.loadData(getUrl(mDataSet.size()));
+            }
+        });
+        return listView;
     }
 
     @Override
     public LoadingPager.LoadedResult initData() {
-        SystemClock.sleep(2000);
-        return loadedResults[new Random().nextInt(3)];
+        mSubjectProtocol = new SubjectProtocol();
+        try {
+            List<SubjectBean> subjectBeanList = mSubjectProtocol.loadData(getUrl(0));
+            if (subjectBeanList != null && subjectBeanList.size() != 0) {
+                mDataSet = subjectBeanList;
+                return LoadingPager.LoadedResult.RESULT_SUCCESS;
+            } else {
+                return LoadingPager.LoadedResult.RESULT_EMPTY;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return LoadingPager.LoadedResult.RESULT_ERROR;
+        }
+    }
+
+    @NonNull
+    private String getUrl(int index) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("index", index % 60);
+        return Constants.URLS.BASEURL + "subject?" + HttpUtils.getUrlParamsByMap(params);
     }
 }

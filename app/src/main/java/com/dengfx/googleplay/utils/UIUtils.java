@@ -47,4 +47,14 @@ public class UIUtils {
     public static String getPackageName() {
         return getContext().getPackageName();
     }
+
+    public static int dip2px(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return (int) (density * dp + 0.5f);
+    }
+
+    public static int px2dip(int px) {
+        float density = getResources().getDisplayMetrics().density;
+        return (int) (px / density + 0.5f);
+    }
 }

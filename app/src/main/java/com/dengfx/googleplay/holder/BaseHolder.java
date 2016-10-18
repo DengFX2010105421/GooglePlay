@@ -17,7 +17,7 @@ public abstract class BaseHolder<T> {
 
     public void setData(T data) {
         mData = data;
-        setData2HolderView(data);
+        setData2HolderView(mData);
     }
 
     protected abstract void setData2HolderView(T data);
