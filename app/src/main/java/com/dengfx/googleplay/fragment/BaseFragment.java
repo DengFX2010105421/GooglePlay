@@ -1,4 +1,4 @@
-package com.dengfx.googleplay.base;
+package com.dengfx.googleplay.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dengfx.googleplay.base.LoadingPager;
 import com.dengfx.googleplay.utils.UIUtils;
 
 /**
@@ -16,12 +17,11 @@ import com.dengfx.googleplay.utils.UIUtils;
 public abstract class BaseFragment extends Fragment {
 
     public LoadingPager.LoadedResult[] loadedResults = {LoadingPager.LoadedResult.RESULT_ERROR, LoadingPager.LoadedResult.RESULT_EMPTY, LoadingPager.LoadedResult.RESULT_SUCCESS};
+    private LoadingPager mLoadingPager;
 
     public LoadingPager getLoadingPager() {
         return mLoadingPager;
     }
-
-    private LoadingPager mLoadingPager;
 
     @Nullable
     @Override
@@ -43,26 +43,9 @@ public abstract class BaseFragment extends Fragment {
         return mLoadingPager;
     }
 
-//    public LoadingPager.LoadedResult checkResult(Object resObj) {
-//        if (resObj == null) {
-//            return LoadingPager.LoadedResult.RESULT_EMPTY;
-//        }
-//
-//        if (resObj instanceof List && ((List) resObj).size() == 0) {
-//            return LoadingPager.LoadedResult.RESULT_EMPTY;
-//        }
-//
-//        if (resObj instanceof Map && ((Map) resObj).size() == 0) {
-//            return LoadingPager.LoadedResult.RESULT_EMPTY;
-//        }
-//        return LoadingPager.LoadedResult.RESULT_SUCCESS;
-//    }
-
     public abstract View initSuccessView();
 
     public abstract LoadingPager.LoadedResult initData();
-
-
 }
 
 

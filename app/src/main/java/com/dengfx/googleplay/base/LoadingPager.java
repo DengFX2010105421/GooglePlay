@@ -106,5 +106,4 @@ public abstract class LoadingPager extends FrameLayout {
             mLoadDataTask = null;
         }
     }
-
 }

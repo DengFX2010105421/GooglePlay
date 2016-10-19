@@ -20,7 +20,7 @@ public abstract class BaseHolder<T> {
         setData2HolderView(mData);
     }
 
-    protected abstract void setData2HolderView(T data);
+    public abstract void setData2HolderView(T data);
 
     protected abstract View initHolderView();
 }

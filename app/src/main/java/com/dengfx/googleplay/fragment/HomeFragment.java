@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.dengfx.googleplay.adapter.HomeAdapter;
-import com.dengfx.googleplay.base.BaseFragment;
 import com.dengfx.googleplay.base.LoadingPager;
 import com.dengfx.googleplay.bean.HomeBean;
 import com.dengfx.googleplay.bean.ItemBean;

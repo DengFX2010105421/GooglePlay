@@ -6,7 +6,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.dengfx.googleplay.base.BaseFragment;
 import com.dengfx.googleplay.base.LoadingPager;
 import com.dengfx.googleplay.utils.UIUtils;
 

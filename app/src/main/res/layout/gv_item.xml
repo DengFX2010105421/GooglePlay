@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <com.dengfx.googleplay.view.RatioLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            app:ratio="0.41"
+            app:relative="width">
+
+            <ImageView
+                android:id="@+id/iv_picture1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.dengfx.googleplay.view.RatioLayout>
+
+        <TextView
+            android:id="@+id/tv_name1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <com.dengfx.googleplay.view.RatioLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            app:ratio="0.41"
+            app:relative="width">
+
+            <ImageView
+                android:id="@+id/iv_picture2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.dengfx.googleplay.view.RatioLayout>
+
+        <TextView
+            android:id="@+id/tv_name2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <com.dengfx.googleplay.view.RatioLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            app:ratio="0.41"
+            app:relative="width">
+
+            <ImageView
+                android:id="@+id/iv_picture3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.dengfx.googleplay.view.RatioLayout>
+
+        <TextView
+            android:id="@+id/tv_name3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+    </RelativeLayout>
+
+</LinearLayout>

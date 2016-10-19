@@ -8,16 +8,15 @@ import com.dengfx.googleplay.R;
 import com.dengfx.googleplay.utils.UIUtils;
 
 public class LoadMoreHolder extends BaseHolder<Integer> {
+    public static final int LOADMORE_LOADING = 0;
+    public static final int LOADMORE_ERROR = 1;
+    public static final int LOADMORE_NONE = 2;
     protected LinearLayout itemLoadmoreContainerLoading;
     protected TextView itemLoadmoreTvRetry;
     protected LinearLayout itemLoadmoreContainerRetry;
 
-    public static final int LOADMORE_LOADING = 0;
-    public static final int LOADMORE_ERROR = 1;
-    public static final int LOADMORE_NONE = 2;
-
     @Override
-    protected void setData2HolderView(Integer currentState) {
+    public void setData2HolderView(Integer currentState) {
         itemLoadmoreContainerLoading.setVisibility(View.GONE);
         itemLoadmoreContainerRetry.setVisibility(View.GONE);
         switch (currentState) {

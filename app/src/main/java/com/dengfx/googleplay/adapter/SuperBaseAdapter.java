@@ -9,7 +9,6 @@ import com.dengfx.googleplay.MyApplication;
 import com.dengfx.googleplay.holder.BaseHolder;
 import com.dengfx.googleplay.holder.LoadMoreHolder;
 import com.dengfx.googleplay.proxy.ThreadPoolProxyFactory;
-import com.dengfx.googleplay.utils.LogUtils;
 
 import java.util.List;
 
@@ -23,8 +22,8 @@ import static com.dengfx.googleplay.holder.LoadMoreHolder.LOADMORE_NONE;
 
 public abstract class SuperBaseAdapter<T> extends MyBaseAdapter implements AdapterView.OnItemClickListener {
 
-    private static final int VIEWTYPE_LOADMORE = 1;
-    private static final int VIEWTYPE_NORMAL = 0;
+    public static final int VIEWTYPE_LOADMORE = 0;
+    public static final int VIEWTYPE_NORMAL = 1;
     private static final int PAGE_SIZE = 20;
     private LoadMoreHolder mLoadMoreHolder;
     private LoadMoreData mLoadMoreDataTask;
@@ -50,30 +49,25 @@ public abstract class SuperBaseAdapter<T> extends MyBaseAdapter implements Adapt
 
                 case VIEWTYPE_NORMAL:
                     baseHolder = getSpecialHolder();
-
                     break;
             }
         } else {
             baseHolder = (BaseHolder) convertView.getTag();
         }
-        convertView = baseHolder.mItemView;
 
-        switch (currentItemViewType) {
-            case VIEWTYPE_LOADMORE:
-                if (canLoadMore()) {
-                    mState = LOADMORE_LOADING;
-                    trigger2LoadMoreData();
-                } else {
-                    mState = LOADMORE_NONE;
-                }
-                mLoadMoreHolder.setData(mState);
-                break;
-
-            case VIEWTYPE_NORMAL:
-                baseHolder.setData(getItem(position));
-                break;
+        if (currentItemViewType == VIEWTYPE_LOADMORE) {
+            if (canLoadMore()) {
+                mState = LOADMORE_LOADING;
+                trigger2LoadMoreData();
+            } else {
+                mState = LOADMORE_NONE;
+            }
+            mLoadMoreHolder.setData(mState);
+        } else {
+            Object data = mDataSet.get(position);
+            baseHolder.setData(data);
         }
-        return convertView;
+        return baseHolder.mItemView;
     }
 
     private void trigger2LoadMoreData() {
@@ -125,7 +119,11 @@ public abstract class SuperBaseAdapter<T> extends MyBaseAdapter implements Adapt
 
     @Override
     public int getItemViewType(int position) {
-        return position == getCount() - 1 ? VIEWTYPE_LOADMORE : VIEWTYPE_NORMAL;
+        return position == getCount() - 1 ? VIEWTYPE_LOADMORE : /*VIEWTYPE_NORMAL*/ getNormalItemViewType(position);
+    }
+
+    public int getNormalItemViewType(int position) {
+        return VIEWTYPE_NORMAL;
     }
 
     public abstract BaseHolder getSpecialHolder();

@@ -24,7 +24,7 @@ public class ItemHolder extends BaseHolder<ItemBean> {
     private TextView itemAppinfoTvDes;
 
     @Override
-    protected void setData2HolderView(ItemBean data) {
+    public void setData2HolderView(ItemBean data) {
         //http://localhost:8080/GooglePlayServer/image?name=app/com.itheima.www/icon.jpg
         Map<String, Object> params = new HashMap<>();
         params.put("name", data.iconUrl);
