@@ -26,7 +26,6 @@ import java.util.Random;
 public class HotFragment extends BaseFragment {
     private List<String> mDataSet;
 
-
     public static HotFragment newInstance() {
         return new HotFragment();
     }
@@ -41,7 +40,7 @@ public class HotFragment extends BaseFragment {
             tv.setText(data);
             tv.setGravity(Gravity.CENTER);
             tv.setTextColor(Color.WHITE);
-            int _5dp = UIUtils.dip2px(5);
+            int _5dp = UIUtils.dip2px(10);
             tv.setPadding(_5dp, _5dp, _5dp, _5dp);
 
             Random random = new Random();
@@ -69,6 +68,7 @@ public class HotFragment extends BaseFragment {
             flowLayout.addView(tv);
         }
 
+        scrollView.setPadding(5, 5, 5, 5);
         scrollView.addView(flowLayout);
         return scrollView;
     }
@@ -77,9 +77,8 @@ public class HotFragment extends BaseFragment {
     public LoadingPager.LoadedResult initData() {
         HotProtocol hotProtocol = new HotProtocol();
         try {
-            List<String> stringList = hotProtocol.loadData(getUrl(0));
-            if (stringList != null && stringList.size() != 0) {
-                mDataSet = stringList;
+            mDataSet = hotProtocol.loadData(getUrl(0));
+            if (mDataSet != null && mDataSet.size() != 0) {
                 return LoadingPager.LoadedResult.RESULT_SUCCESS;
             } else {
                 return LoadingPager.LoadedResult.RESULT_EMPTY;

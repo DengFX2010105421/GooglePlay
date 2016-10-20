@@ -15,7 +15,6 @@ import com.dengfx.googleplay.utils.UIUtils;
 public abstract class LoadingPager extends FrameLayout {
 
     public static final int STATE_LOADING = 0;
-
     public static final int STATE_ERROR = 1;
     public static final int STATE_EMPTY = 2;
     public static final int STATE_SUCCESS = 3;
@@ -41,7 +40,7 @@ public abstract class LoadingPager extends FrameLayout {
         mErrorView = View.inflate(UIUtils.getContext(), R.layout.pager_error, null);
         this.addView(mErrorView);
 
-        mErrorView.findViewById(R.id.error_btn_retry).setOnClickListener(new OnClickListener() {
+        mErrorView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 triggerLoadData();
@@ -53,16 +52,6 @@ public abstract class LoadingPager extends FrameLayout {
         refreshViewByState();
     }
 
-    public void triggerLoadData() {
-        if (CURRENT_STATE != STATE_SUCCESS && mLoadDataTask == null){
-            CURRENT_STATE = STATE_LOADING;
-            refreshViewByState();
-            mLoadDataTask = new LoadDataTask();
-            //new Thread(mLoadDataTask).start();
-            ThreadPoolProxyFactory.getNormalThreadPoolProxy().submit(mLoadDataTask);
-        }
-    }
-
     private void refreshViewByState() {
         mLoadingView.setVisibility(CURRENT_STATE == STATE_LOADING ? VISIBLE : GONE);
         mErrorView.setVisibility(CURRENT_STATE == STATE_ERROR ? VISIBLE : GONE);
@@ -71,7 +60,21 @@ public abstract class LoadingPager extends FrameLayout {
         if (CURRENT_STATE == STATE_SUCCESS && mSuccessView == null) {
             mSuccessView = initSuccessView();
             this.addView(mSuccessView);
+//            mSuccessView.setVisibility(CURRENT_STATE == STATE_SUCCESS ? VISIBLE : GONE);
+//            CURRENT_STATE = STATE_LOADING;
+        }
+
+        if (mSuccessView != null) {
             mSuccessView.setVisibility(CURRENT_STATE == STATE_SUCCESS ? VISIBLE : GONE);
+        }
+    }
+
+    public void triggerLoadData() {
+        if (CURRENT_STATE != STATE_SUCCESS && mLoadDataTask == null) {
+            CURRENT_STATE = STATE_LOADING;
+            refreshViewByState();
+            mLoadDataTask = new LoadDataTask();
+            ThreadPoolProxyFactory.getNormalThreadPoolProxy().submit(mLoadDataTask);
         }
     }
 
@@ -80,7 +83,7 @@ public abstract class LoadingPager extends FrameLayout {
     protected abstract View initSuccessView();
 
     public enum LoadedResult {
-        RESULT_SUCCESS(STATE_SUCCESS), RESULT_ERROR(STATE_ERROR),RESULT_EMPTY(STATE_EMPTY);
+        RESULT_SUCCESS(STATE_SUCCESS), RESULT_ERROR(STATE_ERROR), RESULT_EMPTY(STATE_EMPTY);
 
         public int mState;
 

@@ -35,10 +35,8 @@ public class CategoryFragment extends BaseFragment {
     public LoadingPager.LoadedResult initData() {
         CategoryProtocol categoryProtocol = new CategoryProtocol();
         try {
-            List<CategoryBean> categoryBeanList = categoryProtocol.loadData(getUrl(0));
-            System.out.print(categoryBeanList);
-            if (categoryBeanList != null && categoryBeanList.size() != 0) {
-                mDataSet = categoryBeanList;
+            mDataSet = categoryProtocol.loadData(getUrl(0));
+            if (mDataSet != null && mDataSet.size() != 0) {
                 return LoadingPager.LoadedResult.RESULT_SUCCESS;
             } else {
                 return LoadingPager.LoadedResult.RESULT_EMPTY;

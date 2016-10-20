@@ -25,7 +25,6 @@ public class ItemHolder extends BaseHolder<ItemBean> {
 
     @Override
     public void setData2HolderView(ItemBean data) {
-        //http://localhost:8080/GooglePlayServer/image?name=app/com.itheima.www/icon.jpg
         Map<String, Object> params = new HashMap<>();
         params.put("name", data.iconUrl);
         String iconUrl = Constants.URLS.BASEURL + "image?" + HttpUtils.getUrlParamsByMap(params);

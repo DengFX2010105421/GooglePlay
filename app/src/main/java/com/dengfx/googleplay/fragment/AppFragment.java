@@ -30,13 +30,6 @@ public class AppFragment extends BaseFragment {
     @Override
     public View initSuccessView() {
         ListView listView = ListViewFactory.createListView();
-//        listView.setAdapter(new AppAdapter(mDataSet, listView) {
-//            @Override
-//            public List onLoadMore() throws Exception {
-//                SystemClock.sleep(2000);
-//                return mAppProtocol.loadData(getUrl(mDataSet.size()));
-//            }
-//        });
         listView.setAdapter(new ItemAdapter(mDataSet, listView) {
             @Override
             public List onLoadMore() throws Exception {
@@ -51,9 +44,8 @@ public class AppFragment extends BaseFragment {
     public LoadingPager.LoadedResult initData() {
         mAppProtocol = new AppProtocol();
         try {
-            List<ItemBean> itemBeanList = mAppProtocol.loadData(getUrl(0));
-            if (itemBeanList != null && itemBeanList.size() != 0) {
-                mDataSet = itemBeanList;
+            mDataSet = mAppProtocol.loadData(getUrl(0));
+            if (mDataSet != null && mDataSet.size() != 0) {
                 return LoadingPager.LoadedResult.RESULT_SUCCESS;
             } else {
                 return LoadingPager.LoadedResult.RESULT_EMPTY;

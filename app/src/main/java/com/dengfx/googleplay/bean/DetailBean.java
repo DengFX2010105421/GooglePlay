@@ -1,7 +1,6 @@
 package com.dengfx.googleplay.bean;
 
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,41 +14,20 @@ import java.util.List;
 
 public class DetailBean implements Serializable {
 
-    @SerializedName("id")
-    public int mId;
-    @SerializedName("name")
-    public String mName;
-    @SerializedName("packageName")
-    public String mPackageName;
-    @SerializedName("iconUrl")
-    public String mIconUrl;
-    @SerializedName("stars")
-    public int mStars;
-    @SerializedName("downloadNum")
-    public String mDownloadNum;
-    @SerializedName("version")
-    public String mVersion;
-    @SerializedName("date")
-    public String mDate;
-    @SerializedName("size")
-    public int mSize;
-    @SerializedName("downloadUrl")
-    public String mDownloadUrl;
-    @SerializedName("des")
-    public String mDes;
-    @SerializedName("author")
-    public String mAuthor;
-    @SerializedName("screen")
-    public List<String> mScreen;
-    /**
-     * safeUrl : app/com.itheima.www/safeIcon0.jpg
-     * safeDesUrl : app/com.itheima.www/safeDesUrl0.jpg
-     * safeDes : 已通过安智市场安全检测，请放心使用
-     * safeDesColor : 0
-     */
-
-    @SerializedName("safe")
-    public List<SafeBean> mSafe;
+    public long id;
+    public String name;
+    public String packageName;
+    public String iconUrl;
+    public float stars;
+    public String downloadNum;
+    public String version;
+    public String date;
+    public long size;
+    public String downloadUrl;
+    public String des;
+    public String author;
+    public List<String> screen;
+    public List<SafeBean> safe;
 
     public static DetailBean objectFromData(String str) {
 
@@ -69,15 +47,31 @@ public class DetailBean implements Serializable {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return "DetailBean{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", iconUrl='" + iconUrl + '\'' +
+                ", stars=" + stars +
+                ", downloadNum='" + downloadNum + '\'' +
+                ", version='" + version + '\'' +
+                ", date='" + date + '\'' +
+                ", size=" + size +
+                ", downloadUrl='" + downloadUrl + '\'' +
+                ", des='" + des + '\'' +
+                ", author='" + author + '\'' +
+                ", screen=" + screen +
+                ", safe=" + safe +
+                '}';
+    }
+
     public static class SafeBean {
-        @SerializedName("safeUrl")
-        public String mSafeUrl;
-        @SerializedName("safeDesUrl")
-        public String mSafeDesUrl;
-        @SerializedName("safeDes")
-        public String mSafeDes;
-        @SerializedName("safeDesColor")
-        public int mSafeDesColor;
+        public String safeUrl;
+        public String safeDesUrl;
+        public String safeDes;
+        public int safeDesColor;
 
         public static SafeBean objectFromData(String str) {
 
@@ -88,7 +82,6 @@ public class DetailBean implements Serializable {
 
             try {
                 JSONObject jsonObject = new JSONObject(str);
-
                 return new Gson().fromJson(jsonObject.getString(str), SafeBean.class);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -97,8 +90,14 @@ public class DetailBean implements Serializable {
             return null;
         }
 
-        public String getSafeUrl() {
-            return mSafeUrl;
+        @Override
+        public String toString() {
+            return "SafeBean{" +
+                    "safeUrl='" + safeUrl + '\'' +
+                    ", safeDesUrl='" + safeDesUrl + '\'' +
+                    ", safeDes='" + safeDes + '\'' +
+                    ", safeDesColor=" + safeDesColor +
+                    '}';
         }
     }
 }

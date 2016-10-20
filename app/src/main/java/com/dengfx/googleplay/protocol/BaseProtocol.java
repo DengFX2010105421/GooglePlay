@@ -77,16 +77,15 @@ public abstract class BaseProtocol<T> {
 
     private T loadDataFromNet(String url) throws IOException {
         Request request = new Request.Builder().get().url(url).build();
-        Response response = getOkHttpClient().newCall(request).execute();
+        Response response = /*getOkHttpClient()*/new OkHttpClient().newCall(request).execute();
         if (response.isSuccessful()) {
-            LogUtils.s("网络获取成功");
             String newJson = response.body().string();
+            LogUtils.e("Net success  ==========  " + newJson);
             LogUtils.s(backupData2Memory(url, newJson) ? "内存缓存成功" : "内存缓存失败");
             LogUtils.s(backupData2Local(url, newJson) ? "本地缓存成功" : "本地缓存失败");
             return parseJson2Obj(newJson);
-        } else {
-            return null;
         }
+        return null;
     }
 
     private boolean backupData2Memory(String url, String json) {

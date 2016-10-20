@@ -45,9 +45,8 @@ public class RecommendFragment extends BaseFragment {
     public LoadingPager.LoadedResult initData() {
         RecommendProtocol recommendProtocol = new RecommendProtocol();
         try {
-            List<String> stringList = recommendProtocol.loadData(getUrl(0));
-            if (stringList != null && stringList.size() != 0) {
-                mDataSet = stringList;
+            mDataSet = recommendProtocol.loadData(getUrl(0));
+            if (mDataSet != null && mDataSet.size() != 0) {
                 return LoadingPager.LoadedResult.RESULT_SUCCESS;
             } else {
                 return LoadingPager.LoadedResult.RESULT_EMPTY;

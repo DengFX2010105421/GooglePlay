@@ -64,15 +64,6 @@ public class HomeFragment extends BaseFragment {
         HomePicturesHolder homePicturesHolder = new HomePicturesHolder();
         homePicturesHolder.setData(mPictureUrls);
         listView.addHeaderView(homePicturesHolder.mItemView);
-//        listView.setAdapter(new HomeAdapter(mDataSet, listView) {
-//
-//            @Override
-//            public List onLoadMore() throws Exception {
-//                SystemClock.sleep(2000);
-//                return mHomeProtocol.loadData(getUrl(mDataSet.size())).list;
-//            }
-//        });
-
         listView.setAdapter(new ItemAdapter(mDataSet, listView) {
             @Override
             public List onLoadMore() throws Exception {

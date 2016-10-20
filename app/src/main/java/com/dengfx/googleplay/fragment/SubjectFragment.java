@@ -43,9 +43,8 @@ public class SubjectFragment extends BaseFragment {
     public LoadingPager.LoadedResult initData() {
         mSubjectProtocol = new SubjectProtocol();
         try {
-            List<SubjectBean> subjectBeanList = mSubjectProtocol.loadData(getUrl(0));
-            if (subjectBeanList != null && subjectBeanList.size() != 0) {
-                mDataSet = subjectBeanList;
+            mDataSet = mSubjectProtocol.loadData(getUrl(0));
+            if (mDataSet != null && mDataSet.size() != 0) {
                 return LoadingPager.LoadedResult.RESULT_SUCCESS;
             } else {
                 return LoadingPager.LoadedResult.RESULT_EMPTY;

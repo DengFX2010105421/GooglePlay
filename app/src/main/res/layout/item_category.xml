@@ -37,13 +37,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                app:ratio="0.41"
+                android:padding="5dp"
+                app:ratio="1"
                 app:relative="width">
 
                 <ImageView
                     android:id="@+id/iv_picture1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:src="@drawable/ic_default"/>
             </com.dengfx.googleplay.view.RatioLayout>
 
@@ -51,8 +53,10 @@
                 android:id="@+id/tv_name1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:padding="4dp"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="10sp"/>
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -69,13 +73,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                app:ratio="0.41"
+                android:padding="5dp"
+                app:ratio="1"
                 app:relative="width">
 
                 <ImageView
                     android:id="@+id/iv_picture2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:src="@drawable/ic_default"/>
             </com.dengfx.googleplay.view.RatioLayout>
 
@@ -83,8 +89,10 @@
                 android:id="@+id/tv_name2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:padding="4dp"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="10sp"/>
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -101,13 +109,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                app:ratio="0.41"
+                android:padding="5dp"
+                app:ratio="1"
                 app:relative="width">
 
                 <ImageView
                     android:id="@+id/iv_picture3"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:src="@drawable/ic_default"/>
             </com.dengfx.googleplay.view.RatioLayout>
 
@@ -115,8 +125,10 @@
                 android:id="@+id/tv_name3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:padding="4dp"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="10sp"/>
+                android:textSize="12sp"/>
         </LinearLayout>
 
     </LinearLayout>

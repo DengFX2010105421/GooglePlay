@@ -25,14 +25,11 @@ public class ItemAdapter extends SuperBaseAdapter<ItemBean> {
     @Override
     public void onNormalItemClick(AdapterView<?> parent, View view, int position, long id) {
         List<ItemBean> dataSet = mDataSet;
-//        Toast.makeText(UIUtils.getContext(), dataSet.get(position).name, Toast.LENGTH_SHORT).show();
-
         Intent intent = new Intent(UIUtils.getContext(), DetailActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("ItenBean", dataSet.get(position));
+        intent.putExtra("packageName", dataSet.get(position).packageName);
         UIUtils.getContext().startActivity(intent);
         super.onNormalItemClick(parent, view, position, id);
-
     }
 
     @Override

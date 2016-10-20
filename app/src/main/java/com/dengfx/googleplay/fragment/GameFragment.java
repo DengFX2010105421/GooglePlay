@@ -30,13 +30,6 @@ public class GameFragment extends BaseFragment {
     @Override
     public View initSuccessView() {
         ListView listView = ListViewFactory.createListView();
-//        listView.setAdapter(new GameAdapter(mDataSet, listView) {
-//            @Override
-//            public List onLoadMore() throws Exception {
-//                SystemClock.sleep(2000);
-//                return mGameProtocol.loadData(getUrl(mDataSet.size()));
-//            }
-//        });
         listView.setAdapter(new ItemAdapter(mDataSet, listView) {
             @Override
             public List onLoadMore() throws Exception {
@@ -47,20 +40,12 @@ public class GameFragment extends BaseFragment {
         return listView;
     }
 
-    @NonNull
-    private String getUrl(int index) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("index", index);
-        return Constants.URLS.BASEURL + "game?" + HttpUtils.getUrlParamsByMap(params);
-    }
-
     @Override
     public LoadingPager.LoadedResult initData() {
         mGameProtocol = new GameProtocol();
         try {
-            List<ItemBean> itemBeanList = mGameProtocol.loadData(getUrl(0));
-            if (itemBeanList != null && itemBeanList.size() != 0) {
-                mDataSet = itemBeanList;
+            mDataSet = mGameProtocol.loadData(getUrl(0));
+            if (mDataSet != null && mDataSet.size() != 0) {
                 return LoadingPager.LoadedResult.RESULT_SUCCESS;
             } else {
                 return LoadingPager.LoadedResult.RESULT_EMPTY;
@@ -69,5 +54,13 @@ public class GameFragment extends BaseFragment {
             e.printStackTrace();
             return LoadingPager.LoadedResult.RESULT_ERROR;
         }
+    }
+
+
+    @NonNull
+    private String getUrl(int index) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("index", index);
+        return Constants.URLS.BASEURL + "game?" + HttpUtils.getUrlParamsByMap(params);
     }
 }
