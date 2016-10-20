@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ListView;
 
-import com.dengfx.googleplay.adapter.HomeAdapter;
+import com.dengfx.googleplay.adapter.ItemAdapter;
 import com.dengfx.googleplay.base.LoadingPager;
 import com.dengfx.googleplay.bean.HomeBean;
 import com.dengfx.googleplay.bean.ItemBean;
@@ -64,8 +64,16 @@ public class HomeFragment extends BaseFragment {
         HomePicturesHolder homePicturesHolder = new HomePicturesHolder();
         homePicturesHolder.setData(mPictureUrls);
         listView.addHeaderView(homePicturesHolder.mItemView);
-        listView.setAdapter(new HomeAdapter(mDataSet, listView) {
+//        listView.setAdapter(new HomeAdapter(mDataSet, listView) {
+//
+//            @Override
+//            public List onLoadMore() throws Exception {
+//                SystemClock.sleep(2000);
+//                return mHomeProtocol.loadData(getUrl(mDataSet.size())).list;
+//            }
+//        });
 
+        listView.setAdapter(new ItemAdapter(mDataSet, listView) {
             @Override
             public List onLoadMore() throws Exception {
                 SystemClock.sleep(2000);

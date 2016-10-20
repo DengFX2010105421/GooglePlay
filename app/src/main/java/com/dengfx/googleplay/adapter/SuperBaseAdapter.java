@@ -4,6 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.dengfx.googleplay.MyApplication;
 import com.dengfx.googleplay.holder.BaseHolder;
@@ -91,6 +92,11 @@ public abstract class SuperBaseAdapter<T> extends MyBaseAdapter implements Adapt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //处理头布局
+        if (mAbsListView instanceof ListView) {
+            position -= ((ListView) mAbsListView).getHeaderViewsCount();
+        }
+
         switch (getItemViewType(position)) {
             case VIEWTYPE_LOADMORE:
                 if (mState == LOADMORE_ERROR) {

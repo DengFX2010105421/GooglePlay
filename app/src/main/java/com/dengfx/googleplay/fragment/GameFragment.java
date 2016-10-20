@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ListView;
 
-import com.dengfx.googleplay.adapter.GameAdapter;
+import com.dengfx.googleplay.adapter.ItemAdapter;
 import com.dengfx.googleplay.base.LoadingPager;
 import com.dengfx.googleplay.bean.ItemBean;
 import com.dengfx.googleplay.config.Constants;
@@ -30,7 +30,14 @@ public class GameFragment extends BaseFragment {
     @Override
     public View initSuccessView() {
         ListView listView = ListViewFactory.createListView();
-        listView.setAdapter(new GameAdapter(mDataSet, listView) {
+//        listView.setAdapter(new GameAdapter(mDataSet, listView) {
+//            @Override
+//            public List onLoadMore() throws Exception {
+//                SystemClock.sleep(2000);
+//                return mGameProtocol.loadData(getUrl(mDataSet.size()));
+//            }
+//        });
+        listView.setAdapter(new ItemAdapter(mDataSet, listView) {
             @Override
             public List onLoadMore() throws Exception {
                 SystemClock.sleep(2000);
