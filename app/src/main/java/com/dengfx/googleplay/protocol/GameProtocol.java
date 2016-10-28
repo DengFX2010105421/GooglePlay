@@ -1,5 +1,6 @@
 package com.dengfx.googleplay.protocol;
 
+import com.dengfx.googleplay.base.BaseProtocol;
 import com.dengfx.googleplay.bean.ItemBean;
 import com.google.gson.reflect.TypeToken;
 

@@ -1,21 +1,16 @@
 package com.dengfx.googleplay.fragment;
 
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ListView;
 
 import com.dengfx.googleplay.adapter.CategoryAdapter;
+import com.dengfx.googleplay.base.BaseFragment;
 import com.dengfx.googleplay.base.LoadingPager;
 import com.dengfx.googleplay.bean.CategoryBean;
-import com.dengfx.googleplay.config.Constants;
 import com.dengfx.googleplay.factory.ListViewFactory;
 import com.dengfx.googleplay.protocol.CategoryProtocol;
-import com.dengfx.googleplay.utils.HttpUtils;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CategoryFragment extends BaseFragment {
     private List<CategoryBean> mDataSet;
@@ -35,22 +30,15 @@ public class CategoryFragment extends BaseFragment {
     public LoadingPager.LoadedResult initData() {
         CategoryProtocol categoryProtocol = new CategoryProtocol();
         try {
-            mDataSet = categoryProtocol.loadData(getUrl(0));
+            mDataSet = categoryProtocol.loadData(getUrl("category", 0));
             if (mDataSet != null && mDataSet.size() != 0) {
                 return LoadingPager.LoadedResult.RESULT_SUCCESS;
             } else {
                 return LoadingPager.LoadedResult.RESULT_EMPTY;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return LoadingPager.LoadedResult.RESULT_ERROR;
         }
-    }
-
-    @NonNull
-    private String getUrl(int index) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("index", index);
-        return Constants.URLS.BASEURL + "category?" + HttpUtils.getUrlParamsByMap(params);
     }
 }

@@ -8,6 +8,7 @@ import android.text.format.Formatter;
 
 
 import com.dengfx.googleplay.R;
+import com.dengfx.googleplay.base.BaseHolder;
 import com.dengfx.googleplay.bean.DetailBean;
 import com.dengfx.googleplay.config.Constants;
 import com.dengfx.googleplay.utils.UIUtils;
@@ -18,26 +19,21 @@ import com.squareup.picasso.Picasso;
  * Created by 邓FX on 2016/10/20.
  */
 public class DetailInfoHolder extends BaseHolder<DetailBean> {
-    protected ImageView mAppDetailInfoIvIcon;
-    protected TextView mAppDetailInfoTvName;
-    protected RatingBar mAppDetailInfoRbStar;
-    protected TextView mAppDetailInfoTvDownloadnum;
-    protected TextView mAppDetailInfoTvVersion;
-    protected TextView mAppDetailInfoTvTime;
-    protected TextView mAppDetailInfoTvSize;
+    private ImageView mAppDetailInfoIvIcon;
+    private TextView mAppDetailInfoTvName;
+    private RatingBar mAppDetailInfoRbStar;
+    private TextView mAppDetailInfoTvDownloadnum;
+    private TextView mAppDetailInfoTvVersion;
+    private TextView mAppDetailInfoTvTime;
+    private TextView mAppDetailInfoTvSize;
 
     @Override
     public void setData2HolderView(DetailBean detailBean) {
-        String date = UIUtils.getResources().getString(R.string.detail_date, detailBean.date);
-        String downloadNum = UIUtils.getResources().getString(R.string.detail_downloadnum, detailBean.downloadNum);
-        String size = UIUtils.getResources().getString(R.string.detail_size, Formatter.formatFileSize(UIUtils.getContext(), detailBean.size));
-        String version = UIUtils.getResources().getString(R.string.detail_version, detailBean.version);
-
         mAppDetailInfoTvName.setText(detailBean.name);
-        mAppDetailInfoTvTime.setText(date);
-        mAppDetailInfoTvDownloadnum.setText(downloadNum);
-        mAppDetailInfoTvSize.setText(size);
-        mAppDetailInfoTvVersion.setText(version);
+        mAppDetailInfoTvTime.setText(UIUtils.getResources().getString(R.string.detail_date, detailBean.date));
+        mAppDetailInfoTvDownloadnum.setText(UIUtils.getResources().getString(R.string.detail_downloadnum, detailBean.downloadNum));
+        mAppDetailInfoTvSize.setText(UIUtils.getResources().getString(R.string.detail_size, Formatter.formatFileSize(UIUtils.getContext(), detailBean.size)));
+        mAppDetailInfoTvVersion.setText(UIUtils.getResources().getString(R.string.detail_version, detailBean.version));
         mAppDetailInfoRbStar.setRating(detailBean.stars);
         Picasso.with(UIUtils.getContext()).load(Constants.URLS.IMGBASEURL + detailBean.iconUrl).into(mAppDetailInfoIvIcon);
     }

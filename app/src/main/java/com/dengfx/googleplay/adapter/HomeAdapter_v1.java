@@ -3,6 +3,7 @@ package com.dengfx.googleplay.adapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dengfx.googleplay.base.MyBaseAdapter;
 import com.dengfx.googleplay.bean.ItemBean;
 import com.dengfx.googleplay.holder.ItemHolder;
 

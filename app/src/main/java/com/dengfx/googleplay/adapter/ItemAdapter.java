@@ -6,11 +6,14 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 
 import com.dengfx.googleplay.activity.DetailActivity;
+import com.dengfx.googleplay.base.BaseHolder;
+import com.dengfx.googleplay.base.SuperBaseAdapter;
 import com.dengfx.googleplay.bean.ItemBean;
-import com.dengfx.googleplay.holder.BaseHolder;
 import com.dengfx.googleplay.holder.ItemHolder;
+import com.dengfx.googleplay.download.DownloadManager;
 import com.dengfx.googleplay.utils.UIUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +21,10 @@ import java.util.List;
  */
 
 public class ItemAdapter extends SuperBaseAdapter<ItemBean> {
+
+    //创建一个集合保存所有的ItemHolder(观察者)
+    public List<ItemHolder> mItemHolders = new ArrayList<>();
+
     public ItemAdapter(List<ItemBean> dataSet, AbsListView absListView) {
         super(dataSet, absListView);
     }
@@ -34,7 +41,12 @@ public class ItemAdapter extends SuperBaseAdapter<ItemBean> {
 
     @Override
     public BaseHolder getSpecialHolder() {
-        return new ItemHolder();
+        ItemHolder itemHolder = new ItemHolder();
+        //添加观察者到集合中
+        mItemHolders.add(itemHolder);
+
+        DownloadManager.getInstance().addDownloadInfoObserver(itemHolder);
+        return itemHolder;
     }
 
     @Override

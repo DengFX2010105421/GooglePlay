@@ -2,6 +2,7 @@ package com.dengfx.googleplay.protocol;
 
 import android.text.TextUtils;
 
+import com.dengfx.googleplay.base.BaseProtocol;
 import com.dengfx.googleplay.bean.CategoryBean;
 
 import org.json.JSONArray;

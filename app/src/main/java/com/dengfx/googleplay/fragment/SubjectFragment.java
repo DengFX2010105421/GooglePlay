@@ -1,22 +1,17 @@
 package com.dengfx.googleplay.fragment;
 
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ListView;
 
 import com.dengfx.googleplay.adapter.SubjectAdapter;
+import com.dengfx.googleplay.base.BaseFragment;
 import com.dengfx.googleplay.base.LoadingPager;
 import com.dengfx.googleplay.bean.SubjectBean;
-import com.dengfx.googleplay.config.Constants;
 import com.dengfx.googleplay.factory.ListViewFactory;
 import com.dengfx.googleplay.protocol.SubjectProtocol;
-import com.dengfx.googleplay.utils.HttpUtils;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SubjectFragment extends BaseFragment {
     private List<SubjectBean> mDataSet;
@@ -33,7 +28,7 @@ public class SubjectFragment extends BaseFragment {
             @Override
             public List onLoadMore() throws Exception {
                 SystemClock.sleep(2000);
-                return mSubjectProtocol.loadData(getUrl(mDataSet.size()));
+                return mSubjectProtocol.loadData(getUrl("subject", mDataSet.size()));
             }
         });
         return listView;
@@ -43,22 +38,15 @@ public class SubjectFragment extends BaseFragment {
     public LoadingPager.LoadedResult initData() {
         mSubjectProtocol = new SubjectProtocol();
         try {
-            mDataSet = mSubjectProtocol.loadData(getUrl(0));
+            mDataSet = mSubjectProtocol.loadData(getUrl("subject", 0));
             if (mDataSet != null && mDataSet.size() != 0) {
                 return LoadingPager.LoadedResult.RESULT_SUCCESS;
             } else {
                 return LoadingPager.LoadedResult.RESULT_EMPTY;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return LoadingPager.LoadedResult.RESULT_ERROR;
         }
-    }
-
-    @NonNull
-    private String getUrl(int index) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("index", index % 60);
-        return Constants.URLS.BASEURL + "subject?" + HttpUtils.getUrlParamsByMap(params);
     }
 }

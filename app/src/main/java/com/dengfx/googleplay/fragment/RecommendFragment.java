@@ -1,22 +1,17 @@
 package com.dengfx.googleplay.fragment;
 
 import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
+import com.dengfx.googleplay.base.BaseFragment;
 import com.dengfx.googleplay.base.LoadingPager;
-import com.dengfx.googleplay.config.Constants;
 import com.dengfx.googleplay.protocol.RecommendProtocol;
-import com.dengfx.googleplay.utils.HttpUtils;
 import com.dengfx.googleplay.utils.UIUtils;
 import com.dengfx.googleplay.view.flyInOut.ShakeListener;
 import com.dengfx.googleplay.view.flyInOut.StellarMap;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class RecommendFragment extends BaseFragment {
@@ -45,13 +40,13 @@ public class RecommendFragment extends BaseFragment {
     public LoadingPager.LoadedResult initData() {
         RecommendProtocol recommendProtocol = new RecommendProtocol();
         try {
-            mDataSet = recommendProtocol.loadData(getUrl(0));
+            mDataSet = recommendProtocol.loadData(getUrl("recommend", 0));
             if (mDataSet != null && mDataSet.size() != 0) {
                 return LoadingPager.LoadedResult.RESULT_SUCCESS;
             } else {
                 return LoadingPager.LoadedResult.RESULT_EMPTY;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return LoadingPager.LoadedResult.RESULT_ERROR;
         }
@@ -73,13 +68,6 @@ public class RecommendFragment extends BaseFragment {
         super.onPause();
     }
 
-    @NonNull
-    private String getUrl(int index) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("index", index);
-        return Constants.URLS.BASEURL + "recommend?" + HttpUtils.getUrlParamsByMap(params);
-    }
-
     private class MyShakeListener implements ShakeListener.OnShakeListener {
 
         @Override
@@ -96,7 +84,6 @@ public class RecommendFragment extends BaseFragment {
 
         @Override
         public int getGroupCount() {
-
             return size % PAGESIZE == 0 ? size % PAGESIZE : size % PAGESIZE + 1;
         }
 

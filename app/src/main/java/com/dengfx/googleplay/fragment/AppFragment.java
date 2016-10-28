@@ -1,27 +1,26 @@
 package com.dengfx.googleplay.fragment;
 
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ListView;
 
 import com.dengfx.googleplay.adapter.ItemAdapter;
+import com.dengfx.googleplay.base.BaseFragment;
 import com.dengfx.googleplay.base.LoadingPager;
 import com.dengfx.googleplay.bean.ItemBean;
-import com.dengfx.googleplay.config.Constants;
 import com.dengfx.googleplay.factory.ListViewFactory;
+import com.dengfx.googleplay.holder.ItemHolder;
+import com.dengfx.googleplay.download.DownloadInfo;
+import com.dengfx.googleplay.download.DownloadManager;
 import com.dengfx.googleplay.protocol.AppProtocol;
-import com.dengfx.googleplay.utils.HttpUtils;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class AppFragment extends BaseFragment {
     private List<ItemBean> mDataSet;
     private AppProtocol mAppProtocol;
+    private ItemAdapter mItemAdapter;
 
     public static AppFragment newInstance() {
         return new AppFragment();
@@ -30,13 +29,14 @@ public class AppFragment extends BaseFragment {
     @Override
     public View initSuccessView() {
         ListView listView = ListViewFactory.createListView();
-        listView.setAdapter(new ItemAdapter(mDataSet, listView) {
+        mItemAdapter = new ItemAdapter(mDataSet, listView) {
             @Override
             public List onLoadMore() throws Exception {
                 SystemClock.sleep(2000);
-                return mAppProtocol.loadData(getUrl(mDataSet.size()));
+                return mAppProtocol.loadData(getUrl("app", mDataSet.size()));
             }
-        });
+        };
+        listView.setAdapter(mItemAdapter);
         return listView;
     }
 
@@ -44,22 +44,48 @@ public class AppFragment extends BaseFragment {
     public LoadingPager.LoadedResult initData() {
         mAppProtocol = new AppProtocol();
         try {
-            mDataSet = mAppProtocol.loadData(getUrl(0));
+            mDataSet = mAppProtocol.loadData(getUrl("app", 0));
             if (mDataSet != null && mDataSet.size() != 0) {
                 return LoadingPager.LoadedResult.RESULT_SUCCESS;
             } else {
                 return LoadingPager.LoadedResult.RESULT_EMPTY;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return LoadingPager.LoadedResult.RESULT_ERROR;
         }
     }
 
-    @NonNull
-    private String getUrl(int index) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("index", index);
-        return Constants.URLS.BASEURL + "app?" + HttpUtils.getUrlParamsByMap(params);
+    @Override
+    public void onResume() {
+        //listview-->adapter
+        if (mItemAdapter != null) {
+            List<ItemHolder> itemHolders = mItemAdapter.mItemHolders;
+            if (itemHolders != null && itemHolders.size() != 0) {
+                for (ItemHolder itemHolder : itemHolders) {
+                    //添加观察者到观察者集合中
+                    DownloadManager.getInstance().addDownloadInfoObserver(itemHolder);
+
+                    //手动发布最新的状态
+                    DownloadInfo downLoadInfo = DownloadManager.getInstance().getDownloadInfo(itemHolder.mData);
+                    DownloadManager.getInstance().notifyDownloadInfoObservers(downLoadInfo);
+                }
+            }
+        }
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        if (mItemAdapter != null) {
+            List<ItemHolder> itemHolders = mItemAdapter.mItemHolders;
+            if (itemHolders != null && itemHolders.size() != 0) {
+                for (ItemHolder itemHolder : itemHolders) {
+                    //从观察者集合中移除观察者
+                    DownloadManager.getInstance().removeDownloadInfoObserver(itemHolder);
+                }
+            }
+        }
+        super.onPause();
     }
 }

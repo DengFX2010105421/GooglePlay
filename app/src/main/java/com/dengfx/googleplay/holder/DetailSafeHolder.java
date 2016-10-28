@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dengfx.googleplay.R;
+import com.dengfx.googleplay.base.BaseHolder;
 import com.dengfx.googleplay.bean.DetailBean;
 import com.dengfx.googleplay.config.Constants;
 import com.dengfx.googleplay.utils.UIUtils;

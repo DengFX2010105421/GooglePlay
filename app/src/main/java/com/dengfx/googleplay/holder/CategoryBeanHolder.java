@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dengfx.googleplay.R;
+import com.dengfx.googleplay.base.BaseHolder;
 import com.dengfx.googleplay.bean.CategoryBean;
 import com.dengfx.googleplay.config.Constants;
 import com.dengfx.googleplay.utils.UIUtils;
@@ -19,16 +20,16 @@ import com.squareup.picasso.Picasso;
  */
 public class CategoryBeanHolder extends BaseHolder<CategoryBean> {
 
-    protected TextView tvTitle;
-    protected ImageView ivPicture1;
-    protected TextView tvName1;
-    protected LinearLayout categoryItem1;
-    protected ImageView ivPicture2;
-    protected TextView tvName2;
-    protected LinearLayout categoryItem2;
-    protected ImageView ivPicture3;
-    protected TextView tvName3;
-    protected LinearLayout categoryItem3;
+    private TextView tvTitle;
+    private ImageView ivPicture1;
+    private TextView tvName1;
+    private LinearLayout categoryItem1;
+    private ImageView ivPicture2;
+    private TextView tvName2;
+    private LinearLayout categoryItem2;
+    private ImageView ivPicture3;
+    private TextView tvName3;
+    private LinearLayout categoryItem3;
     private LinearLayout mLlIconcItem;
 
     @Override

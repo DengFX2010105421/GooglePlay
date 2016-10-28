@@ -2,7 +2,7 @@ package com.dengfx.googleplay.factory;
 
 import android.support.v4.app.Fragment;
 
-import com.dengfx.googleplay.fragment.BaseFragment;
+import com.dengfx.googleplay.base.BaseFragment;
 import com.dengfx.googleplay.fragment.AppFragment;
 import com.dengfx.googleplay.fragment.CategoryFragment;
 import com.dengfx.googleplay.fragment.GameFragment;

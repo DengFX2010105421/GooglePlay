@@ -36,9 +36,8 @@ public class MD5utils {
 	 */
 	public static String  md5EncodeFile(String filePath) {
 		StringBuilder builder = new StringBuilder();
-		try {
+		try (FileInputStream inputStream = new FileInputStream(filePath)) {
 			MessageDigest digest = MessageDigest.getInstance("md5");
-			FileInputStream inputStream = new FileInputStream(filePath);
 			int length = 0;
 			byte[] buffer = new byte[1024];
 			while ((length = inputStream.read(buffer)) != -1) {

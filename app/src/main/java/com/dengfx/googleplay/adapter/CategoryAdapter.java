@@ -2,8 +2,9 @@ package com.dengfx.googleplay.adapter;
 
 import android.widget.AbsListView;
 
+import com.dengfx.googleplay.base.SuperBaseAdapter;
 import com.dengfx.googleplay.bean.CategoryBean;
-import com.dengfx.googleplay.holder.BaseHolder;
+import com.dengfx.googleplay.base.BaseHolder;
 import com.dengfx.googleplay.holder.CategoryBeanHolder;
 
 import java.util.List;

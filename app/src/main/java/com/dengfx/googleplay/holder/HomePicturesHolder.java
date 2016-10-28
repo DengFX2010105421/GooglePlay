@@ -2,7 +2,6 @@ package com.dengfx.googleplay.holder;
 
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -10,6 +9,9 @@ import android.widget.LinearLayout;
 
 import com.dengfx.googleplay.MyApplication;
 import com.dengfx.googleplay.R;
+import com.dengfx.googleplay.animation.DepthPageTransformer;
+import com.dengfx.googleplay.animation.ZoomOutPageTransformer;
+import com.dengfx.googleplay.base.BaseHolder;
 import com.dengfx.googleplay.config.Constants;
 import com.dengfx.googleplay.utils.UIUtils;
 import com.squareup.picasso.Picasso;
@@ -22,18 +24,20 @@ import java.util.List;
 
 public class HomePicturesHolder extends BaseHolder<List<String>> {
 
-    protected ViewPager itemHomePicturePager;
-    protected LinearLayout itemHomePictureContainerIndicator;
-
+    private ViewPager itemHomePicturePager;
+    private LinearLayout itemHomePictureContainerIndicator;
     private AutoScrollask mAutoScrollask;
 
     @Override
     public void setData2HolderView(final List<String> pictureUrls) {
-        final int size = pictureUrls.size();
+        final int size = pictureUrls == null ? 0 : pictureUrls.size();
+        if (mAutoScrollask == null) {
+            mAutoScrollask = new AutoScrollask();
+        }
         itemHomePicturePager.setAdapter(new PagerAdapter() {
             @Override
             public int getCount() {
-                return pictureUrls == null ? 0 : size * 1000 * 1000;
+                return size * 1000 * 1000;
             }
 
             @Override
@@ -61,7 +65,7 @@ public class HomePicturesHolder extends BaseHolder<List<String>> {
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                //MyApplication.mMainThreadHandler.postDelayed(mAutoScrollask, 2000);
             }
 
             @Override
@@ -76,57 +80,56 @@ public class HomePicturesHolder extends BaseHolder<List<String>> {
 
                 switch (state) {
                     case ViewPager.SCROLL_STATE_IDLE:
-                        if (mAutoScrollask == null) {
-                            mAutoScrollask = new AutoScrollask();
-                        }
                         MyApplication.mMainThreadHandler.postDelayed(mAutoScrollask, 2000);
                         break;
 
                     case ViewPager.SCROLL_STATE_DRAGGING:
                         MyApplication.mMainThreadHandler.removeCallbacks(mAutoScrollask);
                         break;
+
+                    case ViewPager.SCROLL_STATE_SETTLING:
                 }
             }
         });
 
-        itemHomePicturePager.setOnTouchListener(new View.OnTouchListener() {
-            float downX, downY;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        MyApplication.mMainThreadHandler.removeCallbacks(mAutoScrollask);
-                        //=================================================
-                        downX = event.getRawX();
-                        downY = event.getRawY();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        MyApplication.mMainThreadHandler.removeCallbacks(mAutoScrollask);
-                        //=================================================
-                        float moveX = event.getRawX();
-                        float moveY = event.getRawY();
-
-                        float deltaX = moveX - downX;
-                        float deltaY = moveY - downY;
-                        itemHomePicturePager.getParent().requestDisallowInterceptTouchEvent(Math.abs(deltaX) > Math.abs(deltaY));
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (mAutoScrollask == null) {
-                            mAutoScrollask = new AutoScrollask();
-                        }
-                        MyApplication.mMainThreadHandler.post(mAutoScrollask);
-                        break;
-                }
-                return false;
-            }
-        });
+//        itemHomePicturePager.setOnTouchListener(new View.OnTouchListener() {
+////            float downX, downY;
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        MyApplication.mMainThreadHandler.removeCallbacks(mAutoScrollask);
+//                        //=================================================
+////                        downX = event.getRawX();
+////                        downY = event.getRawY();
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//                        MyApplication.mMainThreadHandler.removeCallbacks(mAutoScrollask);
+//                        //=================================================
+////                        float moveX = event.getRawX();
+////                        float moveY = event.getRawY();
+////
+////                        float deltaX = moveX - downX;
+////                        float deltaY = moveY - downY;
+////                        itemHomePicturePager.getParent().requestDisallowInterceptTouchEvent(Math.abs(deltaX) > Math.abs(deltaY));
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+////                        if (mAutoScrollask == null) {
+////                            mAutoScrollask = new AutoScrollask();
+////                        }
+//                        MyApplication.mMainThreadHandler.post(mAutoScrollask);
+//                        break;
+//                }
+//                return false;
+//            }
+//        });
 
         initIndicator(size);
 
         itemHomePicturePager.setCurrentItem(size * 1000 * 500);
 
-        mAutoScrollask = new AutoScrollask();
+
         MyApplication.mMainThreadHandler.postDelayed(mAutoScrollask, 2000);
     }
 
@@ -153,6 +156,8 @@ public class HomePicturesHolder extends BaseHolder<List<String>> {
     private void initView(View rootView) {
         itemHomePicturePager = (ViewPager) rootView.findViewById(R.id.item_home_picture_pager);
         itemHomePictureContainerIndicator = (LinearLayout) rootView.findViewById(R.id.item_home_picture_container_indicator);
+        itemHomePicturePager.setPageTransformer(true, new DepthPageTransformer());
+        itemHomePicturePager.setPageTransformer(true, new ZoomOutPageTransformer());
     }
 
     private class AutoScrollask implements Runnable {
@@ -162,4 +167,5 @@ public class HomePicturesHolder extends BaseHolder<List<String>> {
             itemHomePicturePager.setCurrentItem(itemHomePicturePager.getCurrentItem() + 1);
         }
     }
+
 }

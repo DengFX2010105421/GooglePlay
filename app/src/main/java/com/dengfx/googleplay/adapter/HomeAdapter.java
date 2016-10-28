@@ -5,8 +5,9 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.dengfx.googleplay.base.SuperBaseAdapter;
 import com.dengfx.googleplay.bean.ItemBean;
-import com.dengfx.googleplay.holder.BaseHolder;
+import com.dengfx.googleplay.base.BaseHolder;
 import com.dengfx.googleplay.holder.ItemHolder;
 import com.dengfx.googleplay.utils.UIUtils;
 

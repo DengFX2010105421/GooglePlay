@@ -1,27 +1,34 @@
 package com.dengfx.googleplay.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 
 import com.dengfx.googleplay.R;
 import com.dengfx.googleplay.base.LoadingPager;
 import com.dengfx.googleplay.bean.DetailBean;
 import com.dengfx.googleplay.config.Constants;
+import com.dengfx.googleplay.holder.DetailDesHolder;
+import com.dengfx.googleplay.holder.DetailDownloadHolder;
 import com.dengfx.googleplay.holder.DetailInfoHolder;
+import com.dengfx.googleplay.holder.DetailPicHolder;
 import com.dengfx.googleplay.holder.DetailSafeHolder;
+import com.dengfx.googleplay.download.DownloadInfo;
+import com.dengfx.googleplay.download.DownloadManager;
 import com.dengfx.googleplay.protocol.DetailProtocol;
 import com.dengfx.googleplay.utils.HttpUtils;
-import com.dengfx.googleplay.utils.LogUtils;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DetailActivity extends Activity {
+public class DetailActivity extends AppCompatActivity {
 
     protected FrameLayout mDetailFlDownload;
     protected FrameLayout mDetailFlInfo;
@@ -32,6 +39,7 @@ public class DetailActivity extends Activity {
     private LoadingPager mLoadingPager;
     private String mPackageName;
     private DetailBean mDetailBean;
+    private DetailDownloadHolder mDetailDownloadHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +58,30 @@ public class DetailActivity extends Activity {
         };
         setContentView(mLoadingPager);
         init();
+        initActionBar();
         triggerLoadData();
+    }
+
+    @Override
+    protected void onResume() {
+        //动态的添加观察者到观察者集合中
+        if (mDetailDownloadHolder != null) {
+            DownloadManager.getInstance().addDownloadInfoObserver(mDetailDownloadHolder);
+
+            //手动发布最新的DownLoadInfo
+            DownloadInfo downLoadInfo = DownloadManager.getInstance().getDownloadInfo(mDetailBean);
+            DownloadManager.getInstance().notifyDownloadInfoObservers(downLoadInfo);
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //动态从观察者集合中移除观察者
+        if (mDetailDownloadHolder != null) {
+            DownloadManager.getInstance().removeDownloadInfoObserver(mDetailDownloadHolder);
+        }
     }
 
     private void triggerLoadData() {
@@ -62,6 +93,10 @@ public class DetailActivity extends Activity {
         initView(successView);
         //-----------------------------------------------------
         DetailInfoHolder detailInfoHolder = new DetailInfoHolder();
+        ViewCompat.animate(detailInfoHolder.mItemView).rotationX(360)
+                .setInterpolator(new OvershootInterpolator(4))
+                .setDuration(1000)
+                .start();
         mDetailFlInfo.addView(detailInfoHolder.mItemView);
         detailInfoHolder.setData(mDetailBean);
         //------------------------------------------------------
@@ -69,19 +104,34 @@ public class DetailActivity extends Activity {
         mDetailFlSafe.addView(detailSafeHolder.mItemView);
         detailSafeHolder.setData(mDetailBean);
         //-------------------------------------------------------
-//        DetailPicHolder detailPicHolder = new DetailPicHolder();
-//        mDetailFlPic.addView(detailPicHolder.mItemView);
-//        detailPicHolder.setData(mDetailBean);
-//        //-------------------------------------------------------
-//        DetailDesHolder detailDesHolder = new DetailDesHolder();
-//        mDetailFlDes.addView(detailDesHolder.mItemView);
-//        detailDesHolder.setData(mDetailBean);
+        DetailPicHolder detailPicHolder = new DetailPicHolder();
+        mDetailFlPic.addView(detailPicHolder.mItemView);
+        detailPicHolder.setData(mDetailBean);
+//        //-----------------------------------------------------
+        DetailDesHolder detailDesHolder = new DetailDesHolder();
+        mDetailFlDes.addView(detailDesHolder.mItemView);
+        detailDesHolder.setData(mDetailBean);
         //-------------------------------------------------------
-//        DetailDownloadHolder detailDownloadHolder = new DetailDownloadHolder();
-//        mDetailFlDownload.addView(detailDownloadHolder.mItemView);
-//        detailDownloadHolder.setData(mDetailBean);
-
+        mDetailDownloadHolder = new DetailDownloadHolder();
+        mDetailFlDownload.addView(mDetailDownloadHolder.mItemView);
+        mDetailDownloadHolder.setData(mDetailBean);
+        DownloadManager.getInstance().addDownloadInfoObserver(mDetailDownloadHolder);
+        //-------------------------------------------------------
         return successView;
+    }
+
+    private void initActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("GooglePlay");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private LoadingPager.LoadedResult initData() {
@@ -89,7 +139,7 @@ public class DetailActivity extends Activity {
         try {
             mDetailBean = detailProtocol.loadData(getUrl(mPackageName));
             return mDetailBean != null ? LoadingPager.LoadedResult.RESULT_SUCCESS : LoadingPager.LoadedResult.RESULT_EMPTY;
-        } catch (IOException e1) {
+        } catch (Exception e1) {
             e1.printStackTrace();
             return LoadingPager.LoadedResult.RESULT_ERROR;
         }
@@ -103,9 +153,7 @@ public class DetailActivity extends Activity {
     private String getUrl(String packageName) {
         Map<String, Object> params = new HashMap<>();
         params.put("packageName", packageName);
-        String url = Constants.URLS.BASEURL + "detail?" + HttpUtils.getUrlParamsByMap(params);
-        LogUtils.e("===========" + url + "=============");
-        return url;
+        return Constants.URLS.BASEURL + "detail?" + HttpUtils.getUrlParamsByMap(params);
     }
 
     private void initView(View rootView) {

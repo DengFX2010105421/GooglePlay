@@ -18,4 +18,6 @@
     <color name="app_detail_safe_normal">#999999</color>
     <color name="app_detail_safe_warning">#ff8800</color>
 
+    <color name="background_tab_pressed">#6633B5E5</color>
+
 </resources>
